@@ -9,6 +9,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
 
+<style>
+    .control {width: 400px;}
+</style>
+
 <body>
     <div class="form-wrapper">
         <form action="submit" method="POST">
@@ -27,7 +31,14 @@
                 </div>
             </div>
             <div class="control">
-                <input type="text" id="dateTime2" />
+                <label for="backgroundCP" class="form-label">Background</label>
+                <span>Current Color: <span id="currentBackgroundColor">#000000</span></span>
+                <input type="color" class="form-control form-control-color" id="backgroundCP" value="#ffffff" title="Choose your color">
+            </div>
+            <div class="control">
+                <label for="textCP" class="form-label">Text</label>
+                <span>Current Color: <span id="currentTextColor">#000000</span></span>
+                <input type="color" class="form-control form-control-color" id="textCP" value="#000000" title="Choose your color">
             </div>
         </form>
     <p>Diff between the two date:</p>
@@ -57,8 +68,33 @@
         }
         $(function() {
             $('#datetimepicker1').datetimepicker({defaultDate: new Date()})
-            $('#datetimepicker2').datetimepicker({defaultDate: new Date()}).on('dp.change', onChange)
+            $('#datetimepicker2').datetimepicker({defaultDate: new Date()})
             $('#datetimepicker2').on('dp.change', function (e) { onChange() })
+            $('#datetimepicker1').on('dp.change', function (e) { onChange() })
+
+            $('#backgroundCP').on('input', function(ev) {
+                const newColor = $(this).val()
+                if (newColor == $('#textCP').val()) {
+                    alert('Cannot select the same color for background and text.')
+                    $(this).val($.data(this, 'current'));
+                    return false;
+                }
+                $.data(this, 'current', $(this).val());
+                $('body').css("background-color", $(this).val())
+                $('#currentBackgroundColor').text($(this).val())
+            });
+
+            $('#textCP').on('input', function(ev) {
+                const newColor = $(this).val()
+                if (newColor == $('#backgroundCP').val()) {
+                    alert('Cannot select the same color for background and text.')
+                    $(this).val($.data(this, 'current'));
+                    return false;
+                }
+                $.data(this, 'current', $(this).val());
+                $('body').css("color", $(this).val())
+                $('#currentTextColor').text($(this).val())
+            });
         })
 
     })
