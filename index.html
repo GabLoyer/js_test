@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+
+<body>
+    <div class="form-wrapper">
+        <form action="submit" method="POST">
+            <div class="control">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <div class='input-group date' id='datetimepicker2'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="control">
+                <input type="text" id="dateTime2" />
+            </div>
+        </form>
+    <p>Diff between the two date:</p>
+    <span id="diff"></p>
+    </div>
+
+</body>
+<script>
+    $(document).ready(() => {
+        console.log('allo')
+        const onChange = () => {
+            const date1 = dayjs($('#datetimepicker1').find('input').val())
+            let date2 = dayjs($('#datetimepicker2').find('input').val())
+            const year = date2.diff(date1, 'year')
+            date2 = date2.subtract(year, 'year')
+            const month = date2.diff(date1, 'month')
+            date2 = date2.subtract(month, 'month')
+            const day = date2.diff(date1, 'day')
+            date2 = date2.subtract(day, 'day')
+            const hour = date2.diff(date1, 'hour')
+            date2 = date2.subtract(hour, 'hour')
+            const minute = date2.diff(date1, 'minute')
+            date2 = date2.subtract(minute, 'minute')
+            const second = date2.diff(date1, 'second')
+
+            $("#diff").text(`${year} year(s), ${month} month(s), ${day} day(s), ${hour} hour(s), ${minute} minute, ${second} second`)
+        }
+        $(function() {
+            $('#datetimepicker1').datetimepicker({defaultDate: new Date()})
+            $('#datetimepicker2').datetimepicker({defaultDate: new Date()}).on('dp.change', onChange)
+            $('#datetimepicker2').on('dp.change', function (e) { onChange() })
+        })
+
+    })
+</script>
+</html>
